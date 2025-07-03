@@ -1,15 +1,15 @@
 import { createClient } from '@supabase/supabase-js'
 
-// Enhanced debug logging with timestamps
+// Enhanced debug logging
 const DEBUG = true
-const log = (...args) => DEBUG && console.log(`🔷 [Supabase ${new Date().toISOString()}]:`, ...args)
-const error = (...args) => console.error(`❌ [Supabase ${new Date().toISOString()}]:`, ...args)
+const log = (...args) => DEBUG && console.log('🔷 [Supabase]:', ...args)
+const error = (...args) => console.error('❌ [Supabase]:', ...args)
 
 // Environment variables with validation
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-// Initialize with enhanced options and SSL config
+// Initialize with enhanced options
 const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     autoRefreshToken: true,
@@ -20,9 +20,6 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     headers: {
       'X-Client-Info': 'supabase-js-web'
     }
-  },
-  db: {
-    schema: 'public'
   }
 })
 
@@ -32,11 +29,10 @@ const testConnection = async () => {
     log('Testing connection...')
     const { data, error: testError } = await supabase
       .from('users_so2024')
-      .select('id')
-      .limit(1)
+      .select('count', { count: 'exact', head: true })
     
     if (testError) throw testError
-    log('Connection successful ✅')
+    log('Connection successful! ✅')
     return true
   } catch (err) {
     error('Connection failed:', err.message)
@@ -44,8 +40,7 @@ const testConnection = async () => {
   }
 }
 
-// Export initialized client
-export default supabase
-
-// Run initial connection test
+// Execute connection test
 testConnection()
+
+export default supabase
