@@ -27,7 +27,13 @@ export default defineConfig({
       '/rest/v1': {
         target: 'https://ezddhpptywphszvxnmto.supabase.co',
         changeOrigin: true,
-        secure: false
+        secure: false,
+        headers: {
+          'apikey': process.env.VITE_SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${process.env.VITE_SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
       }
     }
   }
