@@ -2,6 +2,26 @@
 import { useState } from 'react';
 import supabase from '../lib/supabase';
 
+export const lookupUserByEmail = async (email) => {
+  try {
+    console.log('🔍 Looking up user:', email)
+    
+    const { data, error } = await supabase
+      .from('users_so2024')
+      .select('id, email, first_name, last_name, woocommerce_customer_id')
+      .eq('email', email)
+      .maybeSingle()
+
+    if (error) throw error
+
+    console.log('👤 User lookup result:', data)
+    return data
+  } catch (err) {
+    console.error('❌ User lookup failed:', err.message)
+    return null
+  }
+}
+
 export const useSupabaseOrders = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);

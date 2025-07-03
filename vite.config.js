@@ -23,8 +23,12 @@ export default defineConfig({
   },
   server: {
     port: 3000,
-    https: {
-      rejectUnauthorized: false
+    proxy: {
+      '/rest/v1': {
+        target: 'https://ezddhpptywphszvxnmto.supabase.co',
+        changeOrigin: true,
+        secure: false
+      }
     }
   }
 })
